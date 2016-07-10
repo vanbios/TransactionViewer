@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">TransactionViewer</string>
+
+    <string name="products_header">Products</string>
+    <string name="transactions_header_placeholder">Transactions for %s</string>
+    <string name="total_placeholder">Total: \u00A3%s</string>
+    <string name="transactions_count_placeholder">%d transactions</string>
+
+    <string name="file_not_found_placeholder">File %s not found</string>
+    <string name="file_is_empty_placeholder">File %s is empty</string>
+
+    <string name="no_available_products">No available products</string>
+    <string name="press_again_to_exit">Press again to exit</string>
+
+    <string name="transactions_file_name">transactions.json</string>
+    <string name="rates_file_name">rates.json</string>
+</resources>
