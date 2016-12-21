@@ -9,12 +9,12 @@
 
     <TextView
         android:id="@+id/tvFrgProductsEmptyList"
+        style="@style/TitleFontBlack"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:gravity="center_horizontal"
         android:text="@string/no_available_products"
-        style="@style/TitleFontBlack"
-        android:layout_centerInParent="true"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
 </RelativeLayout>

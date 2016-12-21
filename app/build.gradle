@@ -17,15 +17,16 @@ retrolambda {
 }
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.0"
+    compileSdkVersion 25
+    buildToolsVersion "24.0.3"
 
     defaultConfig {
         applicationId "com.vanbios.transactionviewer"
         minSdkVersion 14
-        targetSdkVersion 24
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -40,20 +41,51 @@ android {
     }
 }
 
+ext {
+    supportLibraryVersion = '25.1.0'
+    retrofitVersion = '2.1.0'
+    daggerVersion = '2.7'
+    gsonVersion = '2.8.0'
+    butterknifeVersion = '8.4.0'
+    lombokVersion = '1.16.12'
+    eventbusVersion = '3.0.0'
+    streamapiVersion = '1.1.4'
+    rxjavaVersion = '1.2.3'
+    rxandroidVersion = '1.2.1'
+    rxmathVersion = '1.0.0'
+    jsr250Version = '1.0'
+    mochitoVersion = '2.3.10'
+    junitVersion = '4.12'
+    espressoVersion = '2.2.2'
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:24.0.0'
-    compile 'com.android.support:design:24.0.0'
+    androidTestCompile("com.android.support.test.espresso:espresso-core:$espressoVersion", {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    testCompile "junit:junit:$junitVersion"
+    testCompile "org.mockito:mockito-core:$mochitoVersion"
 
-    compile 'io.reactivex:rxandroid:1.2.1'
-    compile 'io.reactivex:rxjava:1.1.6'
-    compile 'io.reactivex:rxjava-math:1.0.0'
 
-    compile 'com.jakewharton:butterknife:8.1.0'
-    apt 'com.jakewharton:butterknife-compiler:8.1.0'
+    compile "com.android.support:appcompat-v7:$supportLibraryVersion"
+    compile "com.android.support:design:$supportLibraryVersion"
 
-    compile 'com.annimon:stream:1.0.9'
+    compile "io.reactivex:rxandroid:$rxandroidVersion"
+    compile "io.reactivex:rxjava:$rxjavaVersion"
+    compile "io.reactivex:rxjava-math:$rxmathVersion"
 
-    provided "org.projectlombok:lombok:1.16.8"
-    apt "org.projectlombok:lombok:1.16.8"
+    apt "com.google.dagger:dagger-compiler:$daggerVersion"
+    compile "com.google.dagger:dagger:$daggerVersion"
+    provided "javax.annotation:jsr250-api:$jsr250Version"
+
+    compile "com.jakewharton:butterknife:$butterknifeVersion"
+    apt "com.jakewharton:butterknife-compiler:$butterknifeVersion"
+
+    compile "com.google.code.gson:gson:$gsonVersion"
+
+    compile "com.annimon:stream:$streamapiVersion"
+
+    provided "org.projectlombok:lombok:$lombokVersion"
+    apt "org.projectlombok:lombok:$lombokVersion"
 }
