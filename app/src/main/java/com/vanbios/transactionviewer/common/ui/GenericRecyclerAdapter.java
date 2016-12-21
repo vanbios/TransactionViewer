@@ -16,6 +16,7 @@ import static butterknife.ButterKnife.findById;
 /**
  * @author Ihor Bilous
  */
+
 public class GenericRecyclerAdapter<T> extends RecyclerView.Adapter<GenericRecyclerAdapter.GenericViewHolder> {
 
     protected List<T> list;

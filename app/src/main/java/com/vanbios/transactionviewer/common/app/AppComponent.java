@@ -7,7 +7,9 @@ import com.vanbios.transactionviewer.common.utils.json.JsonManagerModule;
 import com.vanbios.transactionviewer.common.utils.rates.RatesManagerModule;
 import com.vanbios.transactionviewer.common.utils.ui.ToastManagerModule;
 import com.vanbios.transactionviewer.products.FrgProducts;
+import com.vanbios.transactionviewer.products.ProductsModule;
 import com.vanbios.transactionviewer.transactions.FrgTransactions;
+import com.vanbios.transactionviewer.transactions.TransactionsModule;
 
 import javax.inject.Singleton;
 
@@ -24,7 +26,9 @@ import dagger.Component;
         RepositoryModule.class,
         ToastManagerModule.class,
         FormatManagerModule.class,
-        JsonManagerModule.class
+        JsonManagerModule.class,
+        TransactionsModule.class,
+        ProductsModule.class
 })
 public interface AppComponent {
 

@@ -7,12 +7,14 @@ import com.vanbios.transactionviewer.common.utils.format.FormatManagerModule;
 import com.vanbios.transactionviewer.common.utils.json.JsonManagerModule;
 import com.vanbios.transactionviewer.common.utils.rates.RatesManagerModule;
 import com.vanbios.transactionviewer.common.utils.ui.ToastManagerModule;
+import com.vanbios.transactionviewer.transactions.TransactionsModule;
 
 import lombok.Getter;
 
 /**
  * @author Ihor Bilous
  */
+
 public class App extends Application {
 
     @Getter
@@ -24,11 +26,6 @@ public class App extends Application {
 
         component = DaggerAppComponent.builder()
                 .appModule(new AppModule(this))
-                .ratesManagerModule(new RatesManagerModule())
-                .repositoryModule(new RepositoryModule())
-                .toastManagerModule(new ToastManagerModule())
-                .formatManagerModule(new FormatManagerModule())
-                .jsonManagerModule(new JsonManagerModule())
                 .build();
     }
 }

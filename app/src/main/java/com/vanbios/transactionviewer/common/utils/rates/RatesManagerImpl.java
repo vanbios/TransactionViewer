@@ -5,7 +5,7 @@ import android.util.Pair;
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
 import com.vanbios.transactionviewer.common.enums.CurrencyEnum;
-import com.vanbios.transactionviewer.common.model.Rate;
+import com.vanbios.transactionviewer.common.models.Rate;
 import com.vanbios.transactionviewer.common.utils.rates.converter.CurrencyPair;
 import com.vanbios.transactionviewer.common.utils.rates.converter.FxRate;
 import com.vanbios.transactionviewer.common.utils.rates.converter.FxRateCalculator;
@@ -23,6 +23,7 @@ import java.util.Set;
 /**
  * @author Ihor Bilous
  */
+
 public class RatesManagerImpl implements RatesManager {
 
     @Override

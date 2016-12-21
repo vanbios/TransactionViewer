@@ -1,4 +1,4 @@
-package com.vanbios.transactionviewer.object;
+package com.vanbios.transactionviewer.common.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,5 +11,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class Rate {
 
-    private String from, to, rate;
+    private String from;
+    private String to;
+    private String rate;
 }

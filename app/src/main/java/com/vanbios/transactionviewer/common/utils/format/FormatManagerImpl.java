@@ -6,6 +6,7 @@ import java.text.DecimalFormatSymbols;
 /**
  * @author Ihor Bilous
  */
+
 public class FormatManagerImpl implements FormatManager {
 
     private static final int PRECISE = 100;

@@ -1,5 +1,7 @@
 package com.vanbios.transactionviewer.common.enums;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,6 +10,7 @@ import lombok.Setter;
  */
 
 @Getter
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 public enum CurrencyEnum {
 
     GBP("£", 1),
@@ -20,10 +23,6 @@ public enum CurrencyEnum {
     @Setter
     private double rate;
 
-    CurrencyEnum(String title, double rate) {
-        this.title = title;
-        this.rate = rate;
-    }
 
     public static void updateRate(String currency, Double rate) {
         switch (valueOf(currency)) {

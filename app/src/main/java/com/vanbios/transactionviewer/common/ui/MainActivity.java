@@ -25,6 +25,7 @@ import static butterknife.ButterKnife.bind;
 /**
  * @author Ihor Bilous
  */
+
 public class MainActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener {
 
     private FragmentManager fragmentManager;

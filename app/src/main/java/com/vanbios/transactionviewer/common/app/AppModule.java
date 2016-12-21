@@ -14,10 +14,13 @@ import lombok.AllArgsConstructor;
  */
 
 @Module
-@AllArgsConstructor
 public class AppModule {
 
     private Application application;
+
+    public AppModule(Application application) {
+        this.application = application;
+    }
 
     @Provides
     @Singleton

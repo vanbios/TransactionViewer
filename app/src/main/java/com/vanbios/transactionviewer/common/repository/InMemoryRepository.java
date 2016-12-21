@@ -1,10 +1,19 @@
 package com.vanbios.transactionviewer.common.repository;
 
+import android.content.Context;
+import android.util.Pair;
+
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
+import com.vanbios.transactionviewer.R;
+import com.vanbios.transactionviewer.common.enums.CurrencyEnum;
+import com.vanbios.transactionviewer.common.models.Rate;
+import com.vanbios.transactionviewer.common.utils.json.JsonManager;
+import com.vanbios.transactionviewer.common.utils.rates.RatesManager;
 import com.vanbios.transactionviewer.products.Product;
-import com.vanbios.transactionviewer.common.model.Rate;
+import com.vanbios.transactionviewer.transactions.Transaction;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -13,24 +22,31 @@ import java.util.Map;
 import java.util.Set;
 
 import lombok.Getter;
+import rx.Observable;
 
 /**
  * @author Ihor Bilous
  */
-public class InMemoryRepository implements Repository {
 
-    //private static volatile Repository instance;
+public class InMemoryRepository implements Repository {
 
     @Getter
     private Map<String, Product> productMap;
     @Getter
     private List<Rate> rateList;
     private Set<String> currencySet;
+    private Context context;
+    private JsonManager jsonManager;
+    private RatesManager ratesManager;
 
-    public InMemoryRepository() {
+
+    public InMemoryRepository(Context context, JsonManager jsonManager, RatesManager ratesManager) {
         productMap = new HashMap<>();
         rateList = new ArrayList<>();
         currencySet = new HashSet<>();
+        this.context = context;
+        this.jsonManager = jsonManager;
+        this.ratesManager = ratesManager;
     }
 
     @Override
@@ -80,15 +96,74 @@ public class InMemoryRepository implements Repository {
         this.currencySet.addAll(currencySet);
     }
 
-    /*public static Repository getInstance() {
-        Repository localInstance = instance;
-        if (localInstance == null) {
-            synchronized (InMemoryRepository.class) {
-                localInstance = instance;
-                if (localInstance == null)
-                    instance = localInstance = new InMemoryRepository();
+    @Override
+    public Observable<List<Product>> getListProductObservable() {
+        return Observable.create(subscriber -> {
+            if (isProductMapEmpty()) {
+                String json = jsonManager.loadJSONFromAsset(context,
+                        context.getString(R.string.transactions_file_name));
+                if (json != null) {
+                    if (json.length() > 0) {
+                        setProductMap(jsonManager.parseProducts(json));
+                    } else {
+                        subscriber.onError(new IOException(String.format(
+                                context.getString(R.string.file_is_empty_placeholder),
+                                context.getString(R.string.transactions_file_name))));
+                    }
+                } else {
+                    subscriber.onError(new IOException(String.format(
+                            context.getString(R.string.file_not_found_placeholder),
+                            context.getString(R.string.transactions_file_name))));
+                }
             }
-        }
-        return localInstance;
-    }*/
+            subscriber.onNext(productMapToList());
+            subscriber.onCompleted();
+        });
+    }
+
+    @Override
+    public Observable<String> getLoadRatesObservable() {
+        return Observable.create(subscriber -> {
+            if (isRateListEmpty()) {
+                String json = jsonManager.loadJSONFromAsset(context,
+                        context.getString(R.string.rates_file_name));
+                if (json != null) {
+                    if (json.length() > 0) {
+                        Pair<List<Rate>, Set<String>> resultPair = jsonManager.parseRates(json);
+                        setRateList(resultPair.first);
+                        setCurrencySet(resultPair.second);
+                        if (!isRateListEmpty()) {
+                            Map<String, Double> rateMap = ratesManager.findRates(getRateList(), getCurrencyList());
+
+                            Stream.of(rateMap)
+                                    .forEach(p -> CurrencyEnum.updateRate(p.getKey(), p.getValue()));
+
+                            Stream.of(getProductMap())
+                                    .forEach(p -> updateTransactionsGbpAmount(p.getValue()));
+
+                            subscriber.onNext(null);
+                        }
+                    } else {
+                        subscriber.onError(new IOException(String.format(
+                                context.getString(R.string.file_is_empty_placeholder),
+                                context.getString(R.string.rates_file_name))));
+                    }
+                } else {
+                    subscriber.onError(new IOException(String.format(
+                            context.getString(R.string.file_not_found_placeholder),
+                            context.getString(R.string.rates_file_name))));
+                }
+            }
+            subscriber.onCompleted();
+        });
+    }
+
+    private void updateTransactionsGbpAmount(Product product) {
+        Stream.of(product.getTransactionsList())
+                .forEach(t -> t.setGbpAmount(calculateGbpAmount(t)));
+    }
+
+    private double calculateGbpAmount(Transaction transaction) {
+        return transaction.getAmount() * CurrencyEnum.getRateByCurrency(transaction.getCurrency());
+    }
 }

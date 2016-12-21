@@ -1,15 +1,18 @@
 package com.vanbios.transactionviewer.common.repository;
 
 import com.vanbios.transactionviewer.products.Product;
-import com.vanbios.transactionviewer.common.model.Rate;
+import com.vanbios.transactionviewer.common.models.Rate;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import rx.Observable;
+
 /**
  * @author Ihor Bilous
  */
+
 public interface Repository {
 
     void setProductMap(Map<String, Product> map);
@@ -31,4 +34,8 @@ public interface Repository {
     Map<String, Product> getProductMap();
 
     List<Rate> getRateList();
+
+    Observable<List<Product>> getListProductObservable();
+
+    Observable<String> getLoadRatesObservable();
 }

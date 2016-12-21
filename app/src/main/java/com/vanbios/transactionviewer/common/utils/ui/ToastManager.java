@@ -5,6 +5,7 @@ import android.content.Context;
 /**
  * @author Ihor Bilous
  */
+
 public interface ToastManager {
 
     int SHORT = 1, LONG = 2;
