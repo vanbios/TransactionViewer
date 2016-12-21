@@ -1,4 +1,4 @@
-package com.vanbios.transactionviewer.fragment;
+package com.vanbios.transactionviewer.transactions;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,14 +10,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.vanbios.transactionviewer.R;
-import com.vanbios.transactionviewer.adapter.TransactionRecyclerAdapter;
-import com.vanbios.transactionviewer.object.Product;
-import com.vanbios.transactionviewer.object.Transaction;
-import com.vanbios.transactionviewer.singleton.InfoSingleton;
-import com.vanbios.transactionviewer.util.FormatUtil;
+import com.vanbios.transactionviewer.common.app.App;
+import com.vanbios.transactionviewer.common.repository.Repository;
+import com.vanbios.transactionviewer.common.utils.format.FormatManager;
+import com.vanbios.transactionviewer.products.Product;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.Unbinder;
@@ -44,10 +45,19 @@ public class FrgTransactions extends Fragment {
 
     public static final String PRODUCT = "product";
 
+    @Inject
+    Repository repository;
+
+    @Inject
+    FormatManager formatManager;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.frg_transactions, container, false);
+
+        ((App) getActivity().getApplication()).getComponent().inject(this);
+
         transactionList = new ArrayList<>();
         initViews();
         loadData();
@@ -57,14 +67,14 @@ public class FrgTransactions extends Fragment {
     private void initViews() {
         unbinder = bind(this, view);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
-        recyclerAdapter = new TransactionRecyclerAdapter(getActivity(), transactionList);
+        recyclerAdapter = new TransactionRecyclerAdapter(getActivity(), transactionList, formatManager);
         recyclerView.setAdapter(recyclerAdapter);
     }
 
     private void loadData() {
         String productName = getArguments().getString(PRODUCT);
         if (productName != null) {
-            Product product = InfoSingleton.getInstance().getProductByName(productName);
+            Product product = repository.getProductByName(productName);
             if (product != null) {
                 transactionList.addAll(product.getTransactionsList());
                 recyclerAdapter.notifyDataSetChanged();
@@ -76,7 +86,7 @@ public class FrgTransactions extends Fragment {
                         .subscribe(sum -> {
                             tvTotal.setText(String.format(
                                     getString(R.string.total_placeholder),
-                                    FormatUtil.doubleToStringFormatter(sum)
+                                    formatManager.doubleToStringFormatter(sum)
                             ));
                         });
             }

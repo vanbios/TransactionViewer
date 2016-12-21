@@ -1,4 +1,4 @@
-package com.vanbios.transactionviewer.fragment;
+package com.vanbios.transactionviewer.products;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,21 +12,22 @@ import android.widget.TextView;
 
 import com.annimon.stream.Stream;
 import com.vanbios.transactionviewer.R;
-import com.vanbios.transactionviewer.adapter.ProductRecyclerAdapter;
-import com.vanbios.transactionviewer.enums.CurrencyEnum;
-import com.vanbios.transactionviewer.object.Product;
-import com.vanbios.transactionviewer.object.Rate;
-import com.vanbios.transactionviewer.object.Transaction;
-import com.vanbios.transactionviewer.singleton.InfoSingleton;
-import com.vanbios.transactionviewer.util.JSONParser;
-import com.vanbios.transactionviewer.util.ToastUtil;
-import com.vanbios.transactionviewer.util.rates.RatesHelper;
+import com.vanbios.transactionviewer.common.app.App;
+import com.vanbios.transactionviewer.common.model.Rate;
+import com.vanbios.transactionviewer.common.enums.CurrencyEnum;
+import com.vanbios.transactionviewer.common.repository.Repository;
+import com.vanbios.transactionviewer.common.utils.json.JsonManager;
+import com.vanbios.transactionviewer.common.utils.rates.RatesManager;
+import com.vanbios.transactionviewer.common.utils.ui.ToastManager;
+import com.vanbios.transactionviewer.transactions.Transaction;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.Unbinder;
@@ -51,10 +52,25 @@ public class FrgProducts extends Fragment {
     private ProductRecyclerAdapter recyclerAdapter;
     private List<Product> productList;
 
+    @Inject
+    RatesManager ratesManager;
+
+    @Inject
+    Repository repository;
+
+    @Inject
+    ToastManager toastManager;
+
+    @Inject
+    JsonManager jsonManager;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.frg_products, container, false);
+
+        ((App) getActivity().getApplication()).getComponent().inject(this);
+
         productList = new ArrayList<>();
         initViews();
         loadData();
@@ -78,12 +94,12 @@ public class FrgProducts extends Fragment {
     private void loadData() {
         Observable.<List<Product>>create(subscriber -> {
             List<Product> items = new ArrayList<>();
-            if (InfoSingleton.getInstance().isProductMapEmpty()) {
-                String json = JSONParser.loadJSONFromAsset(getActivity(),
+            if (repository.isProductMapEmpty()) {
+                String json = jsonManager.loadJSONFromAsset(getActivity(),
                         getString(R.string.transactions_file_name));
                 if (json != null) {
                     if (json.length() > 0) {
-                        InfoSingleton.getInstance().setProductMap(JSONParser.parseProducts(json));
+                        repository.setProductMap(jsonManager.parseProducts(json));
                     } else {
                         subscriber.onError(new IOException(String.format(
                                 getString(R.string.file_is_empty_placeholder),
@@ -95,7 +111,7 @@ public class FrgProducts extends Fragment {
                             getString(R.string.transactions_file_name))));
                 }
             }
-            items = InfoSingleton.getInstance().productMapToList();
+            items = repository.productMapToList();
             subscriber.onNext(items);
             subscriber.onCompleted();
         })
@@ -119,7 +135,7 @@ public class FrgProducts extends Fragment {
                             @Override
                             public void onError(Throwable e) {
                                 setVisibility();
-                                ToastUtil.showClosableToast(getActivity(), e.getMessage(), ToastUtil.LONG);
+                                toastManager.showClosableToast(getActivity(), e.getMessage(), ToastManager.LONG);
                             }
                         }
                 );
@@ -127,24 +143,24 @@ public class FrgProducts extends Fragment {
 
     private void loadRates() {
         Observable.<String>create(subscriber -> {
-            if (InfoSingleton.getInstance().isRateListEmpty()) {
-                String json = JSONParser.loadJSONFromAsset(getActivity(),
+            if (repository.isRateListEmpty()) {
+                String json = jsonManager.loadJSONFromAsset(getActivity(),
                         getString(R.string.rates_file_name));
                 if (json != null) {
                     if (json.length() > 0) {
-                        Pair<List<Rate>, Set<String>> resultPair = JSONParser.parseRates(json);
-                        InfoSingleton.getInstance().setRateList(resultPair.first);
-                        InfoSingleton.getInstance().setCurrencySet(resultPair.second);
-                        if (!InfoSingleton.getInstance().isRateListEmpty()) {
-                            Map<String, Double> rateMap = RatesHelper.findRates(
-                                    InfoSingleton.getInstance().getRateList(),
-                                    InfoSingleton.getInstance().getCurrencyList()
+                        Pair<List<Rate>, Set<String>> resultPair = jsonManager.parseRates(json);
+                        repository.setRateList(resultPair.first);
+                        repository.setCurrencySet(resultPair.second);
+                        if (!repository.isRateListEmpty()) {
+                            Map<String, Double> rateMap = ratesManager.findRates(
+                                    repository.getRateList(),
+                                    repository.getCurrencyList()
                             );
 
                             Stream.of(rateMap)
                                     .forEach(p -> CurrencyEnum.updateRate(p.getKey(), p.getValue()));
 
-                            Stream.of(InfoSingleton.getInstance().getProductMap())
+                            Stream.of(repository.getProductMap())
                                     .forEach(p -> updateTransactionsGbpAmount(p.getValue()));
 
                             subscriber.onNext(null);
@@ -175,7 +191,7 @@ public class FrgProducts extends Fragment {
 
                     @Override
                     public void onError(Throwable e) {
-                        ToastUtil.showClosableToast(getActivity(), e.getMessage(), ToastUtil.LONG);
+                        toastManager.showClosableToast(getActivity(), e.getMessage(), ToastManager.LONG);
                     }
                 });
     }

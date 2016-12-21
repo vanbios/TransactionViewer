@@ -1,10 +1,10 @@
-package com.vanbios.transactionviewer.adapter;
+package com.vanbios.transactionviewer.transactions;
 
 import android.content.Context;
 
-import com.vanbios.transactionviewer.enums.CurrencyEnum;
-import com.vanbios.transactionviewer.object.Transaction;
-import com.vanbios.transactionviewer.util.FormatUtil;
+import com.vanbios.transactionviewer.common.ui.GenericRecyclerAdapter;
+import com.vanbios.transactionviewer.common.enums.CurrencyEnum;
+import com.vanbios.transactionviewer.common.utils.format.FormatManager;
 
 import java.util.List;
 
@@ -13,9 +13,12 @@ import java.util.List;
  */
 public class TransactionRecyclerAdapter extends GenericRecyclerAdapter {
 
+    private FormatManager formatManager;
+
     @SuppressWarnings("unchecked")
-    public TransactionRecyclerAdapter(Context context, List<Transaction> list) {
+    public TransactionRecyclerAdapter(Context context, List<Transaction> list, FormatManager formatManager) {
         super(context, list);
+        this.formatManager = formatManager;
     }
 
     @Override
@@ -23,9 +26,9 @@ public class TransactionRecyclerAdapter extends GenericRecyclerAdapter {
         Transaction transaction = (Transaction) list.get(position);
         holder.tvTitle.setText(String.format("%s%s",
                 CurrencyEnum.getTitleByCurrency(transaction.getCurrency()),
-                FormatUtil.doubleToStringFormatter(transaction.getAmount())));
+                formatManager.doubleToStringFormatter(transaction.getAmount())));
         holder.tvSubTitle.setText(String.format("%s%s",
                 CurrencyEnum.GBP.getTitle(),
-                FormatUtil.doubleToStringFormatter(transaction.getGbpAmount())));
+                formatManager.doubleToStringFormatter(transaction.getGbpAmount())));
     }
 }

@@ -1,6 +1,8 @@
-package com.vanbios.transactionviewer.object;
+package com.vanbios.transactionviewer.products;
 
 import android.support.annotation.NonNull;
+
+import com.vanbios.transactionviewer.transactions.Transaction;
 
 import java.util.List;
 

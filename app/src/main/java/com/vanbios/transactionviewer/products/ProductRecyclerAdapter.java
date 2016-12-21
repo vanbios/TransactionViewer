@@ -1,13 +1,13 @@
-package com.vanbios.transactionviewer.adapter;
+package com.vanbios.transactionviewer.products;
 
 import android.content.Context;
 import android.os.Bundle;
 
-import com.vanbios.transactionviewer.MainActivity;
+import com.vanbios.transactionviewer.common.ui.MainActivity;
 import com.vanbios.transactionviewer.R;
-import com.vanbios.transactionviewer.enums.FrgEnum;
-import com.vanbios.transactionviewer.fragment.FrgTransactions;
-import com.vanbios.transactionviewer.object.Product;
+import com.vanbios.transactionviewer.common.ui.GenericRecyclerAdapter;
+import com.vanbios.transactionviewer.common.enums.FrgEnum;
+import com.vanbios.transactionviewer.transactions.FrgTransactions;
 
 import java.util.List;
 

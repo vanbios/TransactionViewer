@@ -1,4 +1,4 @@
-package com.vanbios.transactionviewer.object;
+package com.vanbios.transactionviewer.transactions;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
