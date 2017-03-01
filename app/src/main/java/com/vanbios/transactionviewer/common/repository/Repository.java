@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import rx.Observable;
+import io.reactivex.Flowable;
 
 /**
  * @author Ihor Bilous
@@ -35,7 +35,7 @@ public interface Repository {
 
     List<Rate> getRateList();
 
-    Observable<List<Product>> getListProductObservable();
+    Flowable<List<Product>> getListProductObservable();
 
-    Observable<String> getLoadRatesObservable();
+    Flowable<String> getLoadRatesObservable();
 }

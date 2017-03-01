@@ -11,7 +11,7 @@ import dagger.Provides;
 public class RatesManagerModule {
 
     @Provides
-    public RatesManager provideRatesManager() {
+    RatesManager provideRatesManager() {
         return new RatesManagerImpl();
     }
 }

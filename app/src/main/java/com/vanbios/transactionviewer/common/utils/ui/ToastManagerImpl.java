@@ -7,7 +7,7 @@ import android.widget.Toast;
  * @author Ihor Bilous
  */
 
-public class ToastManagerImpl implements ToastManager {
+class ToastManagerImpl implements ToastManager {
 
     private static Toast staticToast;
 

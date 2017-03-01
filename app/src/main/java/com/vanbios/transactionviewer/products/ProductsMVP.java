@@ -2,7 +2,7 @@ package com.vanbios.transactionviewer.products;
 
 import java.util.List;
 
-import rx.Observable;
+import io.reactivex.Flowable;
 
 /**
  * @author Ihor Bilous
@@ -12,9 +12,9 @@ public interface ProductsMVP {
 
     interface Model {
 
-        Observable<List<Product>> getProductListObservable();
+        Flowable<List<Product>> getProductListObservable();
 
-        Observable<String> getLoadRatesObservable();
+        Flowable<String> getLoadRatesObservable();
     }
 
     interface View {

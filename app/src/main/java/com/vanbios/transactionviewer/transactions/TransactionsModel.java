@@ -9,11 +9,11 @@ import java.util.List;
  * @author Ihor Bilous
  */
 
-public class TransactionsModel implements TransactionsMVP.Model {
+class TransactionsModel implements TransactionsMVP.Model {
 
     private Repository repository;
 
-    public TransactionsModel(Repository repository) {
+    TransactionsModel(Repository repository) {
         this.repository = repository;
     }
 

@@ -8,22 +8,21 @@ import com.vanbios.transactionviewer.R;
 
 import java.util.List;
 
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * @author Ihor Bilous
  */
 
-public class ProductsPresenter implements ProductsMVP.Presenter {
+class ProductsPresenter implements ProductsMVP.Presenter {
 
     private ProductsMVP.View view;
     private ProductsMVP.Model model;
     private Context context;
 
 
-    public ProductsPresenter(ProductsMVP.Model model, Context context) {
+    ProductsPresenter(ProductsMVP.Model model, Context context) {
         this.model = model;
         this.context = context;
     }
@@ -35,24 +34,13 @@ public class ProductsPresenter implements ProductsMVP.Presenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        new Subscriber<List<ProductViewModel>>() {
-                            @Override
-                            public void onNext(List<ProductViewModel> items) {
-                                if (view != null) {
-                                    view.updateProductsList(items);
-                                }
-                                loadRates();
+                        items -> {
+                            if (view != null) {
+                                view.updateProductsList(items);
                             }
-
-                            @Override
-                            public void onCompleted() {
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-                                handleError(e);
-                            }
-                        }
+                            loadRates();
+                        },
+                        this::handleError
                 );
     }
 
@@ -65,22 +53,11 @@ public class ProductsPresenter implements ProductsMVP.Presenter {
         model.getLoadRatesObservable()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<String>() {
-                    @Override
-                    public void onNext(String s) {
-
-                    }
-
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        handleError(e);
-                    }
-                });
+                .subscribe(
+                        s -> {
+                        },
+                        this::handleError
+                );
     }
 
     private void handleError(Throwable e) {

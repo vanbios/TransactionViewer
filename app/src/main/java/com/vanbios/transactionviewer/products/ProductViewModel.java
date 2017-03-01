@@ -9,7 +9,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class ProductViewModel {
+class ProductViewModel {
 
     private Product product;
     private String title;

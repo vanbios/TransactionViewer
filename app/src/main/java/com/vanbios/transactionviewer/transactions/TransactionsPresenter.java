@@ -10,16 +10,16 @@ import com.vanbios.transactionviewer.common.utils.format.FormatManager;
 
 import java.util.List;
 
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.observables.MathObservable;
-import rx.schedulers.Schedulers;
+import hu.akarnokd.rxjava2.math.MathFlowable;
+import io.reactivex.Flowable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * @author Ihor Bilous
  */
 
-public class TransactionsPresenter implements TransactionsMVP.Presenter {
+class TransactionsPresenter implements TransactionsMVP.Presenter {
 
     private TransactionsMVP.View view;
     private TransactionsMVP.Model model;
@@ -27,7 +27,7 @@ public class TransactionsPresenter implements TransactionsMVP.Presenter {
     private FormatManager formatManager;
     private String productName;
 
-    public TransactionsPresenter(TransactionsMVP.Model model, Context context, FormatManager formatManager) {
+    TransactionsPresenter(TransactionsMVP.Model model, Context context, FormatManager formatManager) {
         this.model = model;
         this.context = context;
         this.formatManager = formatManager;
@@ -40,20 +40,22 @@ public class TransactionsPresenter implements TransactionsMVP.Presenter {
             if (transactionsList != null && view != null) {
                 view.updateTransactionsList(transactionListToViewModelList(transactionsList));
 
-                MathObservable.sumDouble(Observable.from(transactionsList)
-                        .map(Transaction::getGbpAmount))
-                        .subscribeOn(Schedulers.io())
+                Flowable.fromIterable(transactionsList)
+                        .map(Transaction::getGbpAmount)
+                        .to(MathFlowable::sumDouble)
+                        .subscribeOn(Schedulers.computation())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(sum -> {
-                            String total = String.format(
-                                    context.getString(R.string.total_placeholder),
-                                    formatManager.doubleToStringFormatter(sum)
-                            );
+                                    String total = String.format(
+                                            context.getString(R.string.total_placeholder),
+                                            formatManager.doubleToStringFormatter(sum)
+                                    );
 
-                            if (view != null) {
-                                view.updateTransactionsTotal(total);
-                            }
-                        });
+                                    if (view != null) {
+                                        view.updateTransactionsTotal(total);
+                                    }
+                                },
+                                Throwable::printStackTrace);
             }
         }
     }

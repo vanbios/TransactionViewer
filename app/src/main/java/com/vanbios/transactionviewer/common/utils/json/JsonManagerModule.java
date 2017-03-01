@@ -11,7 +11,7 @@ import dagger.Provides;
 public class JsonManagerModule {
 
     @Provides
-    public JsonManager provideJSONManager() {
+    JsonManager provideJSONManager() {
         return new JsonManagerImpl();
     }
 }

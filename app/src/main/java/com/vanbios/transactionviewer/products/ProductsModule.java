@@ -15,12 +15,12 @@ import dagger.Provides;
 public class ProductsModule {
 
     @Provides
-    public ProductsMVP.Presenter provideTransactionsPresenter(ProductsMVP.Model model, Context context) {
+    ProductsMVP.Presenter provideTransactionsPresenter(ProductsMVP.Model model, Context context) {
         return new ProductsPresenter(model, context);
     }
 
     @Provides
-    public ProductsMVP.Model provideTransactionsModel(Repository repository) {
+    ProductsMVP.Model provideTransactionsModel(Repository repository) {
         return new ProductsModel(repository);
     }
 }
