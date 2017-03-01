@@ -10,10 +10,10 @@ import java.util.List;
  * @author Ihor Bilous
  */
 
-public class TransactionRecyclerAdapter extends GenericRecyclerAdapter {
+class TransactionRecyclerAdapter extends GenericRecyclerAdapter {
 
     @SuppressWarnings("unchecked")
-    public TransactionRecyclerAdapter(Context context, List<TransactionViewModel> list) {
+    TransactionRecyclerAdapter(Context context, List<TransactionViewModel> list) {
         super(context, list);
     }
 

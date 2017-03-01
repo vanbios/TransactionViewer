@@ -18,7 +18,7 @@ retrolambda {
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "24.0.3"
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
         applicationId "com.vanbios.transactionviewer"
@@ -42,17 +42,16 @@ android {
 }
 
 ext {
-    supportLibraryVersion = '25.1.0'
-    retrofitVersion = '2.1.0'
-    daggerVersion = '2.7'
+    supportLibraryVersion = '25.2.0'
+    daggerVersion = '2.9'
     gsonVersion = '2.8.0'
-    butterknifeVersion = '8.4.0'
-    lombokVersion = '1.16.12'
+    butterknifeVersion = '8.5.1'
+    lombokVersion = '1.16.14'
     eventbusVersion = '3.0.0'
-    streamapiVersion = '1.1.4'
-    rxjavaVersion = '1.2.3'
-    rxandroidVersion = '1.2.1'
-    rxmathVersion = '1.0.0'
+    streamapiVersion = '1.1.5'
+    rxjavaVersion = '2.0.6'
+    rxandroidVersion = '2.0.1'
+    rxjavaextensionsVersion = '0.15.2'
     jsr250Version = '1.0'
     mochitoVersion = '2.3.10'
     junitVersion = '4.12'
@@ -71,9 +70,9 @@ dependencies {
     compile "com.android.support:appcompat-v7:$supportLibraryVersion"
     compile "com.android.support:design:$supportLibraryVersion"
 
-    compile "io.reactivex:rxandroid:$rxandroidVersion"
-    compile "io.reactivex:rxjava:$rxjavaVersion"
-    compile "io.reactivex:rxjava-math:$rxmathVersion"
+    compile "io.reactivex.rxjava2:rxandroid:$rxandroidVersion"
+    compile "io.reactivex.rxjava2:rxjava:$rxjavaVersion"
+    compile "com.github.akarnokd:rxjava2-extensions:$rxjavaextensionsVersion"
 
     apt "com.google.dagger:dagger-compiler:$daggerVersion"
     compile "com.google.dagger:dagger:$daggerVersion"

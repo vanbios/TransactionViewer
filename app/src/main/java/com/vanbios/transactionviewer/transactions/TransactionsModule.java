@@ -16,12 +16,12 @@ import dagger.Provides;
 public class TransactionsModule {
 
     @Provides
-    public TransactionsMVP.Presenter provideTransactionsPresenter(TransactionsMVP.Model model, Context context, FormatManager formatManager) {
+    TransactionsMVP.Presenter provideTransactionsPresenter(TransactionsMVP.Model model, Context context, FormatManager formatManager) {
         return new TransactionsPresenter(model, context, formatManager);
     }
 
     @Provides
-    public TransactionsMVP.Model provideTransactionsModel(Repository repository) {
+    TransactionsMVP.Model provideTransactionsModel(Repository repository) {
         return new TransactionsModel(repository);
     }
 }

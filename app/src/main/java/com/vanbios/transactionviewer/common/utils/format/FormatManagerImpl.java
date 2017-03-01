@@ -7,7 +7,7 @@ import java.text.DecimalFormatSymbols;
  * @author Ihor Bilous
  */
 
-public class FormatManagerImpl implements FormatManager {
+class FormatManagerImpl implements FormatManager {
 
     private static final int PRECISE = 100;
     private static final String FORMAT = "###,##0.00";

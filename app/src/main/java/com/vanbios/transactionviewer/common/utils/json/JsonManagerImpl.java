@@ -25,7 +25,7 @@ import java.util.Set;
  * @author Ihor Bilous
  */
 
-public class JsonManagerImpl implements JsonManager {
+class JsonManagerImpl implements JsonManager {
 
     @Override
     public String loadJSONFromAsset(Context context, String fileName) {

@@ -45,11 +45,11 @@ public class GenericRecyclerAdapter<T> extends RecyclerView.Adapter<GenericRecyc
     }
 
 
-    public static class GenericViewHolder extends RecyclerView.ViewHolder {
+    protected static class GenericViewHolder extends RecyclerView.ViewHolder {
         public TextView tvTitle, tvSubTitle;
         public View view;
 
-        public GenericViewHolder(View view) {
+        GenericViewHolder(View view) {
             super(view);
             this.view = view;
             tvTitle = findById(view, R.id.tvItemListTitle);

@@ -21,14 +21,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import io.reactivex.Flowable;
 import lombok.Getter;
-import rx.Observable;
 
 /**
  * @author Ihor Bilous
  */
 
-public class InMemoryRepository implements Repository {
+class InMemoryRepository implements Repository {
 
     @Getter
     private Map<String, Product> productMap;
@@ -40,7 +40,7 @@ public class InMemoryRepository implements Repository {
     private RatesManager ratesManager;
 
 
-    public InMemoryRepository(Context context, JsonManager jsonManager, RatesManager ratesManager) {
+    InMemoryRepository(Context context, JsonManager jsonManager, RatesManager ratesManager) {
         productMap = new HashMap<>();
         rateList = new ArrayList<>();
         currencySet = new HashSet<>();
@@ -97,8 +97,8 @@ public class InMemoryRepository implements Repository {
     }
 
     @Override
-    public Observable<List<Product>> getListProductObservable() {
-        return Observable.create(subscriber -> {
+    public Flowable<List<Product>> getListProductObservable() {
+        return Flowable.unsafeCreate(subscriber -> {
             if (isProductMapEmpty()) {
                 String json = jsonManager.loadJSONFromAsset(context,
                         context.getString(R.string.transactions_file_name));
@@ -117,13 +117,13 @@ public class InMemoryRepository implements Repository {
                 }
             }
             subscriber.onNext(productMapToList());
-            subscriber.onCompleted();
+            subscriber.onComplete();
         });
     }
 
     @Override
-    public Observable<String> getLoadRatesObservable() {
-        return Observable.create(subscriber -> {
+    public Flowable<String> getLoadRatesObservable() {
+        return Flowable.unsafeCreate(subscriber -> {
             if (isRateListEmpty()) {
                 String json = jsonManager.loadJSONFromAsset(context,
                         context.getString(R.string.rates_file_name));
@@ -141,7 +141,7 @@ public class InMemoryRepository implements Repository {
                             Stream.of(getProductMap())
                                     .forEach(p -> updateTransactionsGbpAmount(p.getValue()));
 
-                            subscriber.onNext(null);
+                            subscriber.onNext("");
                         }
                     } else {
                         subscriber.onError(new IOException(String.format(
@@ -154,7 +154,7 @@ public class InMemoryRepository implements Repository {
                             context.getString(R.string.rates_file_name))));
                 }
             }
-            subscriber.onCompleted();
+            subscriber.onComplete();
         });
     }
 

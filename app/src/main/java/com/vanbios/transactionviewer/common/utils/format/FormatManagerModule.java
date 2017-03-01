@@ -11,7 +11,7 @@ import dagger.Provides;
 public class FormatManagerModule {
 
     @Provides
-    public FormatManager provideFormatManager() {
+    FormatManager provideFormatManager() {
         return new FormatManagerImpl();
     }
 }

@@ -4,27 +4,27 @@ import com.vanbios.transactionviewer.common.repository.Repository;
 
 import java.util.List;
 
-import rx.Observable;
+import io.reactivex.Flowable;
 
 /**
  * @author Ihor Bilous
  */
 
-public class ProductsModel implements ProductsMVP.Model {
+class ProductsModel implements ProductsMVP.Model {
 
     private Repository repository;
 
-    public ProductsModel(Repository repository) {
+    ProductsModel(Repository repository) {
         this.repository = repository;
     }
 
     @Override
-    public Observable<List<Product>> getProductListObservable() {
+    public Flowable<List<Product>> getProductListObservable() {
         return repository.getListProductObservable();
     }
 
     @Override
-    public Observable<String> getLoadRatesObservable() {
+    public Flowable<String> getLoadRatesObservable() {
         return repository.getLoadRatesObservable();
     }
 }

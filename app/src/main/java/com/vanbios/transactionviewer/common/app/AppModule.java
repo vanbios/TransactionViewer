@@ -7,24 +7,23 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import lombok.AllArgsConstructor;
 
 /**
  * @author Ihor Bilous
  */
 
 @Module
-public class AppModule {
+class AppModule {
 
     private Application application;
 
-    public AppModule(Application application) {
+    AppModule(Application application) {
         this.application = application;
     }
 
     @Provides
     @Singleton
-    public Context provideContext() {
+    Context provideContext() {
         return application;
     }
 }

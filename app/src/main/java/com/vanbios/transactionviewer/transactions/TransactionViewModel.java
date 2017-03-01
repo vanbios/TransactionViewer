@@ -9,7 +9,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class TransactionViewModel {
+class TransactionViewModel {
 
     private String title;
     private String subTitle;

@@ -14,10 +14,10 @@ import java.util.List;
  * @author Ihor Bilous
  */
 
-public class ProductRecyclerAdapter extends GenericRecyclerAdapter {
+class ProductRecyclerAdapter extends GenericRecyclerAdapter {
 
     @SuppressWarnings("unchecked")
-    public ProductRecyclerAdapter(Context context, List<ProductViewModel> list) {
+    ProductRecyclerAdapter(Context context, List<ProductViewModel> list) {
         super(context, list);
     }
 

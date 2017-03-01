@@ -19,7 +19,7 @@ public class RepositoryModule {
 
     @Provides
     @Singleton
-    public Repository provideRepository(Context context, JsonManager jsonManager, RatesManager ratesManager) {
+    Repository provideRepository(Context context, JsonManager jsonManager, RatesManager ratesManager) {
         return new InMemoryRepository(context, jsonManager, ratesManager);
     }
 }
